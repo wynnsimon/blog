@@ -2,7 +2,7 @@
 title: 北京华顺信安前端实习面试time line
 createTime: 2025/06/18 15:07
 tags:
-  - 面经
+  - 面试
   - 前端
 permalink: /article/interview/5/
 ---

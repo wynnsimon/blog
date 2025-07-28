@@ -2,7 +2,7 @@
 title: 医渡云前端实习面试time line
 createTime: 2025/06/17 19:30
 tags:
-  - 面经
+  - 面试
   - 前端
 permalink: /article/interview/4/
 ---

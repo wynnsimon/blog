@@ -2,7 +2,7 @@
 title: 智乐活前端实习面试time line
 createTime: 2025/06/06 21:52
 tags:
-  - 面经
+  - 面试
   - 前端
 permalink: /article/interview/1/
 ---

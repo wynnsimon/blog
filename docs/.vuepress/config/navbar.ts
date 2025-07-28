@@ -44,8 +44,6 @@ export const navbar = defineNavbarConfig([
       { text: "工程化", link: "/front/engineering/", icon: "logos:webpack" },
       { text: "正则", link: "/front/regex/", icon: "skill-icons:regex-light" },
       { text: "Electron", link: "/front/electron/", icon: "logos:electron" },
-      { text: "原理", link: "/front/principle/", icon: "logos:altair" },
-      { text: "面经", link: "/front/interview/", icon: "logos:bluesky" },
     ],
     icon: "typcn:css3",
     activeMatch: "^/front/",

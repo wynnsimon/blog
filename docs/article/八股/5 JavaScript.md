@@ -1,7 +1,11 @@
 ---
 title: 5 JavaScript
+tags:
+  - 八股
+  - 前端
+  - JavaScript
 createTime: 2025/06/17 18:14:20
-permalink: /front/interview/5/
+permalink: /article/essay/5/
 ---
 # 数组常见方法
 

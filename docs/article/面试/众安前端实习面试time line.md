@@ -2,7 +2,7 @@
 title: 众安前端实习面试time line
 createTime: 2025/06/15 17:18
 tags:
-  - 面经
+  - 面试
   - 前端
 permalink: /article/interview/2/
 ---
