@@ -21,7 +21,6 @@ permalink: /more/sites-collect/
 <CardGrid>
   <LinkCard title="React Native" icon="logos:react" href="https://reactnative.dev/" />
   <LinkCard title="Flutter" icon="logos:flutter" href="https://flutter.dev/" />
-  <LinkCard title="NativeScript" icon="logos:nativescript" href="https://nativescript.org/"/>
 </CardGrid>
 
 ---
@@ -41,23 +40,23 @@ permalink: /more/sites-collect/
 
 ---
 
-## Vue相关
+## 组件库
 
 <CardGrid>
   <LinkCard title="Element Plus" icon="logos:element" href="https://element-plus.org/" />
-  <LinkCard title="Naive UI" icon="logos:naiveui" href="https://www.naiveui.com/" />
-  <LinkCard title="vuetify" icon="logos:vuetifyjs" href="https://vuetifyjs.com/" />
-  <LinkCard title="Bootstrap" icon="skill-icons:bootstrap" href="https://v5.bootcss.com/" />
+  <LinkCard title="Ant Design Vue" icon="https://next.antdv.com/assets/logo.1ef800a8.svg" href="https://www.antdv.com/" />
+  <LinkCard title="Ant Design" icon="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" href="https://ant-design.antgroup.com/index-cn" />
  <LinkCard title="Vant UI" icon="https://fastly.jsdelivr.net/npm/@vant/assets/logo.png" href="https://vant-ui.github.io/vant/" />
-  <LinkCard title="Radix Vue" icon="https://www.radix-vue.com/logo.svg" href="https://www.radix-vue.com/" />
+ <LinkCard title="Aeolian Design" icon="https://pinkdopeybug.dpdns.org/logo.png" href="https://pinkdopeybug.dpdns.org/" />
 </CardGrid>
 
----
+## Vue相关
 
 <CardGrid>
   <LinkCard title="Pinia" icon="logos:pinia" href="https://pinia.vuejs.org/" />
   <LinkCard title="Vue Router" icon="logos:vue" href="https://router.vuejs.org/" />
   <LinkCard title="Vue Use" icon="logos:vueuse" href="https://vueuse.org/" />
+  <LinkCard title="Vue Use" icon="logos:nuxt-icon" href="https://nuxt.com.cn/" />
 </CardGrid>
 
 ## CSS相关
@@ -84,6 +83,13 @@ permalink: /more/sites-collect/
   <LinkCard title="SVG background" href="https://www.svgbackgrounds.com/" />
   <LinkCard title="SVG 波浪背景生成" href="https://svgwave.in/" />
   <LinkCard title="贝塞尔生成" href="https://easings.co/" />
+</CardGrid>
+
+---
+
+<CardGrid>
+  <LinkCard title="Tailwind CSS" href="https://www.tailwindcss.cn/" />
+  <LinkCard title="Uno CSS" href="https://unocss.nodejs.cn/" />
 </CardGrid>
 
 ## JavaScript
