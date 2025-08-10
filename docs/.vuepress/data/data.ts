@@ -18,6 +18,12 @@ export const friends = [
     avatar: "https://pic.imgdb.cn/item/66a088b2d9c307b7e9f0e792.jpg",
     desc: "Alive~o.0の观猹录",
   },
+    {
+    name: "EAVAN",
+    link: "https://www.eavan.dev/",
+    avatar: "",
+    desc: "心如止水，字如清风",
+  },
 ];
 
 // 性格
