@@ -3,7 +3,7 @@ import "dotenv/config";
 console.log(
   process.env.VITE_SITE_ID,
   process.env.VITE_ACCESS_TOKEN,
-  process.env.VITE_START_DATE,
+  process.env.VITE_START_DATE
 );
 
 function formatDate(date) {
