@@ -1,0 +1,279 @@
+---
+title: Promise
+tags:
+  - 手撕
+  - 前端
+permalink: /article/shred/2/
+createTime: 2025/08/21 22:16:15
+---
+
+
+```js
+const Status = {
+  PENDING: "pending",
+  FULFILLED: "fulfilled",
+  REJECTED: "rejected",
+};
+
+// 实现异步任务
+function runAsyncTask(callback) {
+  if (typeof queueMicrotask === "function") {
+    queueMicrotask(callback);
+  } else {
+    setTimeout(callback, 0);
+  }
+}
+
+// 如果当前then要返回的值和上一个返回的值相同则报错循环引用
+// 如果上一个返回值是promise则等待promise完成，否则就把值作为下一个then的参数
+function resolvePromise(curRet, preRet, resolve, reject) {
+  if (curRet === preRet) {
+    throw new TypeError("循环引用");
+  }
+  if (preRet instanceof MyPromise) {
+    preRet.then(resolve, reject);
+  } else {
+    resolve(preRet);
+  }
+}
+
+class MyPromise {
+  status = Status.PENDING;
+  result = null;
+  #handler = [];
+  constructor(fn) {
+    const resolve = (value) => {
+      if (this.status === Status.PENDING) {
+        this.status = Status.FULFILLED;
+        this.result = value;
+        this.#handler.forEach((item) => item.onFulfilled(this.result));
+      }
+    };
+
+    const reject = (reason) => {
+      if (this.status === Status.PENDING) {
+        this.status = Status.REJECTED;
+        this.result = reason;
+        this.#handler.forEach((item) => item.onRejected(this.result));
+      }
+    };
+    try {
+      fn(resolve, reject);
+    } catch (e) {
+      reject(e);
+    }
+  }
+
+  then(onFulfilled, onRejected) {
+    onFulfilled = onFulfilled || ((value) => value);
+    onRejected =
+      onRejected ||
+      ((reason) => {
+        throw reason;
+      });
+
+    // 当前then的返回值
+    const promise = new MyPromise((resolve, reject) => {
+      if (this.status === Status.PENDING) {
+        this.#handler.push({
+          onFulfilled: () => {
+            runAsyncTask(() => {
+              try {
+                const res = onFulfilled(this.result);
+                resolvePromise(promise, res, resolve, reject);
+              } catch (err) {
+                reject(err);
+              }
+            });
+          },
+          onRejected: () => {
+            runAsyncTask(() => {
+              try {
+                const res = onRejected(this.result);
+                resolvePromise(promise, res, resolve, reject);
+              } catch (err) {
+                reject(err);
+              }
+            });
+          },
+        });
+      } else if (this.status === Status.FULFILLED) {
+        runAsyncTask(() => {
+          try {
+            // 上一个resolve的返回值
+            const res = onFulfilled(this.result);
+            resolvePromise(promise, res, resolve, reject);
+          } catch (error) {
+            reject(error);
+          }
+        });
+      } else if (this.status === Status.REJECTED) {
+        runAsyncTask(() => {
+          try {
+            const res = onRejected(this.result);
+            resolvePromise(promise, res, resolve, reject);
+          } catch (error) {
+            reject(error);
+          }
+        });
+      }
+    });
+    return promise;
+  }
+
+  catch(onRejected) {
+    return this.then(undefined, onRejected);
+  }
+
+  finally(onFinally) {
+    return this.then(onFinally, onFinally);
+  }
+
+  static resolve(value) {
+    if (value instanceof MyPromise) return value;
+    return new MyPromise((resolve) => {
+      resolve(value);
+    });
+  }
+
+  static reject(reason) {
+    return new MyPromise((undefined, reject) => {
+      reject(reason);
+    });
+  }
+
+  /**
+   * 等待一组 Promise 中第一个完成的结果（无论成功还是失败）。
+   * 哪个 Promise 最先 settled（fulfilled/rejected），就返回它的结果。
+   * @param {Iterable<Promise|any>} promises - 一个可迭代对象（通常是数组），其中的元素可以是 Promise 或任意值。
+   * @returns {Promise<any>}
+   * 返回一个 Promise：
+   * - 成功时：resolve 为第一个完成的成功值
+   * - 失败时：reject 为第一个完成的失败原因
+   */
+  static race(promises) {
+    return new MyPromise((resolve, reject) => {
+      if (!Array.isArray(promises)) {
+        return reject(new TypeError("参数必须是数组"));
+      } else {
+        promises.forEach((p) => {
+          MyPromise.resolve(p).then(
+            (res) => {
+              resolve(res);
+            },
+            (err) => {
+              reject(err);
+            }
+          );
+        });
+      }
+    });
+  }
+
+  /**
+   * 等待所有 Promise 全部成功，返回一个包含所有成功结果的数组。
+   * 如果有任意一个 Promise 失败，则立即返回该失败原因。
+   * @param {Iterable<Promise|any>} promises - 一个可迭代对象（通常是数组），其中的元素可以是 Promise 或任意值。
+   * @returns {Promise<any[]>}
+   * 返回一个 Promise：
+   * - 成功时：resolve 为按输入顺序排列的结果数组
+   * - 失败时：reject 为第一个失败的原因
+   */
+  static all(promises) {
+    return new MyPromise((resolve, reject) => {
+      if (!Array.isArray(promises)) {
+        return reject(new TypeError("参数必须是数组"));
+      } else {
+        // 如果是空数组，则直接resolve
+        promises.length === 0 && resolve(promises);
+        // 如果不是空数组
+        let count = 0;
+        const result = [];
+        promises.forEach((p, index) => {
+          MyPromise.resolve(p).then(
+            (res) => {
+              result[index] = res;
+              ++count;
+              count === promises.length && resolve(result);
+            },
+            (err) => {
+              reject(err);
+            }
+          );
+        });
+      }
+    });
+  }
+
+  /**
+   * 等待所有 Promise 都有结果（无论成功还是失败），并返回每个 Promise 的最终状态与结果。
+   * @param {Iterable<Promise|any>} promises - 一个可迭代对象（通常是数组），其中的元素可以是 Promise 或任意值。
+   * @returns {Promise<Array<{status: 'fulfilled', value: any} | {status: 'rejected', reason: any}>>}
+   * 返回一个 Promise，resolve 的结果是一个对象数组。
+   * - 成功的 Promise：{ status: "fulfilled", value: 结果值 }
+   * - 失败的 Promise：{ status: "rejected", reason: 错误原因 }
+   */
+  static allSettled(promises) {
+    return new MyPromise((resolve, reject) => {
+      if (!Array.isArray(promises)) {
+        reject(new TypeError("参数必须是数组"));
+      } else {
+        // 判断数组是否为空，直接返回resolve
+        promises.length === 0 && resolve(promises);
+
+        let count = 0;
+        const result = [];
+        promises.forEach((p, index) => {
+          MyPromise.resolve(p).then(
+            (res) => {
+              result[index] = { status: "fulfilled", value: res };
+              count++;
+              count === promises.length && resolve(result);
+            },
+            (err) => {
+              result[index] = { status: "rejected", reason: err };
+              count++;
+              count === promises.length && resolve(result);
+            }
+          );
+        });
+      }
+    });
+  }
+
+  /**
+   * 等待一组 Promise 中第一个成功的结果。
+   * 如果所有 Promise 都失败或传入的参数为一个空的可迭代对象，则返回一个带有错误原因的 AggregateError。
+   * @param {Iterable<Promise|any>} promises - 一个可迭代对象（通常是数组），其中的元素可以是 Promise 或任意值。
+   * @returns {Promise<any>}
+   * 返回一个 Promise：
+   * - 成功时：resolve 为第一个成功的值
+   * - 失败时：reject 为 AggregateError，包含所有失败的原因
+   */
+  static any(promises) {
+    return new MyPromise((resolve, reject) => {
+      if (!Array.isArray(promises)) {
+        reject(new TypeError("Argument is not iterable"));
+      } else {
+        promises.length === 0 &&
+          reject(new AggregateError([], "All promises were rejected"));
+
+        let count = 0;
+        const result = [];
+        promises.forEach((p, index) => {
+          MyPromise.resolve(p).then(
+            (res) => {
+              resolve(res);
+            },
+            (err) => {
+              count++;
+              result[index] = err;
+              count === promises.length && reject(new AggregateError(result));
+            }
+          );
+        });
+      }
+    });
+  }
+}
+```
