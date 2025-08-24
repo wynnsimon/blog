@@ -212,7 +212,7 @@ onUnmounted(() => {
     <canvas ref="canvasRef"></canvas>
     <div class="head-social">
       <a
-        href="https://github.com/PinkDopeyBug"
+        href="https://github.com/wynnsimon"
         target="_blank"
         class="head-social-btn"
       >

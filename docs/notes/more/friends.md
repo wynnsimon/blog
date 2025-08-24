@@ -14,7 +14,7 @@ permalink: /more/friends/
 ### _我的友链信息_
 
 ```
-我的名称: PinkDopeyBug
+我的名称: wynnsimon
 网站地址: https://w20241204.dpdns.org/
 描述: 山难现浮槎，心易陷镜花。
 头像: https://w20241204.dpdns.org/images/avatar.jpg

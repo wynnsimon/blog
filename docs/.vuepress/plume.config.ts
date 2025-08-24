@@ -7,15 +7,15 @@ export default defineThemeConfig({
   appearance: true,
   profile: {
     avatar: "/images/avatar.jpg",
-    name: "PinkDopeyBug",
+    name: "wynnsimon",
     description: "",
     circle: true,
   },
   navbar,
   notes,
-  social: [{ icon: "github", link: "https://github.com/PinkDopeyBug" }],
+  social: [{ icon: "github", link: "https://github.com/wynnsimon" }],
   footer: {
     message:
-      '🥼 <a target="_blank" href="https://theme-plume.vuejs.press/">vuepress-theme-plume</a> & ✒️ PinkDopeyBug',
+      '🥼 <a target="_blank" href="https://theme-plume.vuejs.press/">vuepress-theme-plume</a> & ✒️ wynnsimon',
   },
 });

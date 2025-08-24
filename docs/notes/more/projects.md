@@ -5,9 +5,9 @@ permalink: /more/projects/
 ---
 
 <CardGrid>
-  <RepoCard repo="PinkDopeyBug/pinkdopeybug-theme" />
-  <RepoCard repo="PinkDopeyBug/blog" />
-  <RepoCard repo="PinkDopeyBug/aeolian-design" />
-  <RepoCard repo="PinkDopeyBug/opentencentac" />
-  <RepoCard repo="PinkDopeyBug/tencent-ac-vue" />
+  <RepoCard repo="wynnsimon/pinkdopeybug-theme" />
+  <RepoCard repo="wynnsimon/blog" />
+  <RepoCard repo="wynnsimon/aeolian-design" />
+  <RepoCard repo="wynnsimon/opentencentac" />
+  <RepoCard repo="wynnsimon/tencent-ac-vue" />
 </CardGrid>

@@ -32,8 +32,8 @@ export default defineUserConfig({
   ],
   base: "/",
   lang: "zh-CN",
-  title: "PinkDopeyBug",
-  description: "PinkDopeyBug blog.",
+  title: "wynnsimon",
+  description: "wynnsimon blog.",
   bundler: viteBundler({
     viteOptions: {
       envDir: resolve(__dirname, "../../"),
@@ -80,8 +80,8 @@ export default defineUserConfig({
       git: true,
       seo: {
         author: {
-          name: "PinkDopeyBug",
-          url: "https://github.com/PinkDopeyBug",
+          name: "wynnsimon",
+          url: "https://github.com/wynnsimon",
           email: "pinkdopeybug@163.com",
         },
         autoDescription: true,
@@ -116,7 +116,7 @@ export default defineUserConfig({
       provider: "Giscus",
       // 是否默认启用评论
       comment: true,
-      repo: "PinkDopeyBug/blog",
+      repo: "wynnsimon/blog",
       repoId: process.env.VITE_REPO_ID || "",
       category: "Announcements",
       categoryId: process.env.VITE_CATEGORY_ID || "",
@@ -132,7 +132,7 @@ export default defineUserConfig({
     // 版权
     copyright: {
       license: "CC-BY-4.0",
-      author: "PinkDopeyBug",
+      author: "wynnsimon",
     },
   }),
 });

@@ -10,5 +10,5 @@ permalink: /more/bulletin/
 
 为您带来不便请谅解。
 
-ps：贡献者一直都只有PinkDopeyBug一人，显示Pink的贡献者是因为我没好好配置git。后面因为懒就没一个个修改。如果被提及的人不希望被显示可以联系我我会立即删除。
+ps：贡献者一直都只有wynnsimon一人，显示Pink的贡献者是因为我没好好配置git。后面因为懒就没一个个修改。如果被提及的人不希望被显示可以联系我我会立即删除。
 ![](https://w20241204.dpdns.org/images/demos/preview.png)
