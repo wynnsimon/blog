@@ -1,8 +1,8 @@
 {
-  "name": "hoey-blog-plume",
+  "name": "blog",
   "type": "module",
-  "description": "Hoey's blog.",
-  "author": "zhenghaoyang24",
+  "description": "wynnsimon's blog",
+  "author": "wynnsimon",
   "engines": {
     "node": "^18.20.0 || >=20.0.0"
   },
@@ -26,7 +26,6 @@
     "sass-embedded": "^1.89.0",
     "vue": "^3.5.14",
     "vuepress": "2.0.0-rc.23",
-    "vuepress-plugin-social-share": "2.0.0-beta.30",
     "vuepress-theme-plume": "1.0.0-rc.151"
   },
   "dependencies": {

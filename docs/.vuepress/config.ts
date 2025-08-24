@@ -4,7 +4,6 @@ import { plumeTheme } from "vuepress-theme-plume";
 import { googleAnalyticsPlugin } from "@vuepress/plugin-google-analytics";
 import { copyrightPlugin } from "@vuepress/plugin-copyright";
 import { live2dConfig } from "./config/live2d";
-import { socialSharePlugin } from "vuepress-plugin-social-share";
 import path, { resolve } from "node:path";
 import "dotenv/config";
 
@@ -54,21 +53,6 @@ export default defineUserConfig({
     }),
     // live2d配置
     live2dConfig,
-    // 分享插件
-    socialSharePlugin({
-      networks: [
-        "qq",
-        "wechat",
-        "weibo",
-        "douban",
-        "telegram",
-        "x",
-        "facebook",
-        "line",
-        "qrcode",
-        "email",
-      ],
-    }),
   ],
   theme: plumeTheme({
     hostname: "https://w20241204.dpdns.org/",
