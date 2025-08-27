@@ -1,5 +1,5 @@
 ---
-title: 3. vue
+title: vue
 tags:
   - 原理
   - 前端

@@ -1,5 +1,5 @@
 ---
-title: 7 css
+title: css
 tags:
   - 八股
   - 前端

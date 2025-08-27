@@ -1,5 +1,5 @@
 ---
-title: 4. vue
+title: vue
 tags:
   - 八股
   - 前端

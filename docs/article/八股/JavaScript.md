@@ -1,5 +1,5 @@
 ---
-title: 5 JavaScript
+title: JavaScript
 tags:
   - 八股
   - 前端

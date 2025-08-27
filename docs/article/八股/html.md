@@ -1,5 +1,5 @@
 ---
-title: 3. html
+title: html
 tags:
   - 八股
   - 前端

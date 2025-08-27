@@ -1,5 +1,5 @@
 ---
-title: 10 Alien Signals和Vapor Mode
+title: Alien Signals和Vapor Mode
 tags:
   - 原理
   - 前端

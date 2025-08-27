@@ -4,7 +4,7 @@ createTime: 2025/07/15 23:00:04
 tags:
   - vue
   - 前端
-  - 问题
+  - 踩坑
 permalink: /article/question/3/
 ---
 在v-for中不能直接使用ref获取dom，因为v-for会生成许多同样ref命名的dom有多义性
