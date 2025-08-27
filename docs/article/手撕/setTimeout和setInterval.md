@@ -3,7 +3,7 @@ title: setTimeout和setInterval
 tags:
   - 手撕
   - 前端
-permalink: /article/shred/4/
+permalink: /article/shred/5/
 createTime: 2025/08/27 22:00:22
 ---
 
