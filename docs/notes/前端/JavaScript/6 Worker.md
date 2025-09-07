@@ -3,6 +3,8 @@ title: 6 WebWorker
 createTime: 2025/06/18 21:11:40
 permalink: /front/js/6/
 ---
+
+# WebWorker
 在浏览器中创建一个线程执行指定的js代码逻辑
 ```js
 new Worker(path)
@@ -46,3 +48,31 @@ self.postMessage(2)
 react框架没有考虑webworker，webworker的常见主要就是耗时的计算
 1. 随着webgl，canvas等能力的加入，web前端有越来越多的可视化操作。比如在线滤镜，在线绘图，web游戏等等。这些东西都是非常消耗计算的
 2. 一些后台管理系统也会涉及到一些，最常见的就是一些电子表单。大量的数据大量的计算，比如10万条数据导出为excel表格
+
+## SharedWorker
+和webworker很像用法也相似，但有些许不同
+创建的多个sharedworker指向的是同一个脚本，那么它们就会复用同一个worker，也同一个线程，区分它们使用的port（不是端口，翻译为句柄比较合适）
+port用于区分同一个SharedWorker中的任务，同一个sharedworker中的port任务
+在不同的标签页中创建SharedWorker只要指向的脚本文件相同，用的也都是同一个worker（线程）
+
+
+sharedworker监听和发送事件都是基于port
+```js
+let worker=new SharedWorker('./share.js')
+worker.port.ppostMessage(40)
+worker.port.onmessage=(event)=>{}
+
+```
+
+
+# ServiceWorker
+
+
+
+
+
+
+
+
+
+
