@@ -313,3 +313,15 @@ stroke笔画属性
 stroke-width笔画宽度属性
 stroke-linecapL笔画笔帽属性
 stroke-dasharray虚线笔画属性
+
+## svg和canvas的区别
+
+**canvas**
+位图
+- 优点：性能更强（webgl）-skia
+- 缺点：事件交互需要自己实现（点阵计算）
+
+**svg**
+矢量图
+- 优点：任意缩放、真实dom事件交互简便
+- 缺点：性能较弱，无法渲染大数据量
