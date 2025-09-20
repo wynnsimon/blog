@@ -1,3 +1,8 @@
+---
+title: 8 IndexDB
+createTime: 2025/09/17 21:49:37
+permalink: /front/sb3zfd7w/
+---
 ### 特点
 1. 非关系型数据库：以键值对的形式存储数据
 2. 持久化存储：和cookie、localStorage、sessionStorage等方式不同，IndexDB中的数据必须手动删除才会被清除

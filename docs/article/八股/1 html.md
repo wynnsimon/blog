@@ -1,11 +1,11 @@
 ---
-title: html
+title: 1 html
 tags:
   - 八股
   - 前端
   - html
 createTime: 2025/07/01 22:10:02
-permalink: /article/essay/3/
+permalink: /article/essay/1/
 ---
 # 文档声明
 HTML文档通常以文档声明开始，该声明的确定其尝试解析和显示的HTML文档类型。

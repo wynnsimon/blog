@@ -1,11 +1,11 @@
 ---
-title: css
+title: 2 css
 tags:
   - 八股
   - 前端
   - CSS
 createTime: 2025/06/16 10:08:16
-permalink: /article/essay/7/
+permalink: /article/essay/2/
 ---
 # 选择器的优先级
 !important > 行内样式 > id选择器 > 类选择器、属性选择器、伪类选择器 > 标签选择器、伪元素选择器

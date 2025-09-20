@@ -5,7 +5,7 @@ tags:
   - 前端
   - vue
 createTime: 2025/08/13 22:16:08
-permalink: /article/10
+permalink: /article
 ---
 默认的深度响应式机制在处理大规模数据结构或与虚拟 DOM (VDOM) 频繁交互时，对嵌套对象每个属性访问的拦截以及 VDOM diffing 过程的计算成本所需的性能开销较大。
 从而催生了诸如 Alien Signals（专注于响应式引擎内部优化）和 Vapor Mode（专注于渲染机制优化）等实验性项目。
