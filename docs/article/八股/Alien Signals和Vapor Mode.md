@@ -361,9 +361,13 @@ Alien Signal中的计算属性的使用和之前的计算属性使用方式一�
     - 重新执行 `e.fn()`。
     - 调用 `endTracking(e)` 并恢复 `activeSub`。
 
-# Vapor
+# Vapor Mode
 一种基于编译时（Compile-time）优化的全新架构范式。它意味着Vue正在将开销尽可能地转到编译时（vue是一个运行时编译框架）。
 VaporMode是一种受Solid.js启发的、基于编译时优化的新性能模式。它彻底改变了Vue的工作方式，将优化的重心从运行时转移到了编译时。
+
+vue的响应式是以组件为最小单位的，当依赖的数据变化时组件中只有依赖该数据的dom改变，不依赖该数据的组件不会改变，但同样会进行diff算法比对
+使用vapor后会以dom为最小单位，会省去无关的diff，真正做到dom级最小更新
+
 ## 虚拟dom的开销
 
 1. 内存开销（Memory Overhead）

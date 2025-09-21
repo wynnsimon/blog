@@ -745,20 +745,6 @@ v-if是根据条件判断是否创建组件，如果不满足则不会创建出�
 - **策略模式**：－策略模式指对象有某个行为,但是在不同的场景中,该行为有不同的实现方案。mergeOptions
 - **外观模式**：－提供了统一的接口，用来访问子系统中的一群接口。
 
-# vue中的性能优化
-
-- 数据层级不宜过深，合理设置响应式数据
-- 通过Object.freeze()方法冻结属性
-- 使用数据时缓存值的结果，不频繁取值。
-- 合理设置Key属性
-- v-show和v-if的选取
-- 控制组件粒度->Vue采用组件级更新
-- 采用函数式组件->函数式组件开销低
-- 采用异步组件->借助webpack分包的能力
-- 使用keep-alive缓存组件v-once
-- 分页、虚拟滚动、时间分片等策略..
-
-
 # vuex原理
 对于Vuex3核心就是通过newVue(创建了一个Vue实例，进行数据共享。
 对于Vuex4核心就是通过创建一个响应式对象进行数据共享reactive）
@@ -822,3 +808,49 @@ vue2的全局构造函数带来了诸多问题：
 2. ue2的构造函数集成了太多功能，不利于tree shaking，vue3把这些功能使用普通函数导出，能够充分利用tree shaking优化打包体积
 3. vue2没有把组件实例和vue应用两个概念区分开，在vue2中，通过newVue创建的对象，既是一个vue应用，同时又是
 一个特殊的vue组件。vue3中，把两个概念区别开来，通过createApp创建的对象，是一个vue应用，它内部提供的方法是针对整个应用的，而不再是一个特殊的组件。
+
+# 响应式函数
+
+### useTemplateRef
+是vue3.5新推出的语法糖，用于取代vue模板中的ref
+相比于普通的ref获取domref，它拥有：可以自定义名称、更符合直觉等优势
+
+原本的模板ref：
+```vue
+<script>
+	const domRef=ref<HTMLDivElement | null>(null)
+</script>
+<template>
+	<div ref='domRef'/>
+</template>
+```
+useTemplateRef：
+```vue
+<script>
+	const divRef=useTemplateRef<HTMLDivElement | null>('domRef')
+</script>
+<template>
+	<div ref='domRef'/>
+</template>
+```
+
+## ref和reactive的区别
+reactive只会接受对象类型
+ref和reactive的使用是根据变量赋值的方式决定的
+直接赋值用ref，修改数据用reactive
+```ts
+const a=ref({})
+let b=reactive({})
+
+onMounted(()=>{
+	a={name:1} // dom会更新
+	b={name:2} // 数据有更新但dom不会更新
+})
+```
+ref定义了一个类（`RefImpl`），它在 get/set 这两个操作里做了依赖收集和触发更新。因此数据指向以及内容改变都会被监听到
+reactive代理的是原始对象，因此将对象赋值就是将被代理的原始对象替换到，替换后的reactive数据就不是响应式数据了
+![](attachments/Pasted%20image%2020250921200155.png)
+![](attachments/Pasted%20image%2020250921200416.png)
+
+
+
