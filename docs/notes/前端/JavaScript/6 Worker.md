@@ -4,7 +4,11 @@ createTime: 2025/06/18 21:11:40
 permalink: /front/js/6/
 ---
 
+![](attachments/Pasted%20image%2020250927164017.png)
+
 # WebWorker
+专用工作线程
+
 在浏览器中创建一个线程执行指定的js代码逻辑
 ```js
 new Worker(path)
@@ -50,6 +54,7 @@ react框架没有考虑webworker，webworker的常见主要就是耗时的计算
 2. 一些后台管理系统也会涉及到一些，最常见的就是一些电子表单。大量的数据大量的计算，比如10万条数据导出为excel表格
 
 # SharedWorker
+共享工作线程
 和webworker很像用法也相似，但有些许不同
 创建的多个sharedworker指向的是同一个脚本，那么它们就会复用同一个worker，也同一个线程，区分它们使用的port（不是端口，翻译为句柄比较合适）
 port用于区分同一个SharedWorker中的任务，同一个sharedworker中的port任务是串行执行的
@@ -75,6 +80,7 @@ self.onconnect=(event)=>{
 ```
 
 # ServiceWorker
+服务工作线程
 与其他两个worker不同，ServiceWorker在页面创建之后它的生命周期就和当前页面没有关系了
 serviceworker会作为浏览器的一个常驻线程一直运行，即使创建它的页面关闭了也不会停止
 
