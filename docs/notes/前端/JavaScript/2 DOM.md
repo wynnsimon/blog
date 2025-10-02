@@ -599,3 +599,33 @@ touch对象代表一个触摸点。触摸点可能是一根手指，也可能是
 | touchmove  | 手指在一个DOM元素上滑动时触发     |
 | touchend   | 手指从一个DOM元素上移开时触发<br> |
 
+# bfc
+区块格式化上下文（Block Formatting Context)
+
+**不用bfc造成的现象**
+会在标准流的块盒中发生
+1. 水平方向上，撑满整个包含块宽度，垂直方向上，依次摆放
+2. 垂直方向上相邻的元素，margin会合并
+3. 父子关系的情况下，可能会产生margin塌陷
+4. 父子关系的情况下，父元素无视浮动元素会产生高度塌
+5. 兄弟关系的情况下，正常元素可能会被浮动元素覆盖（正常元素在浮动元素之后）
+
+**作用**
+BFC的区域是一块独立的渲染区域，隔绝了内部与外部的联系，内部渲染不会影响到外部，不同的BFC区域，渲染时也互不干扰
+
+1. 开启BFC，其子元素不会再产生margin塌陷问题（不会和他的子元素产生margin合并）
+2. 开启BFC，就算子元素浮动，自身高度也不会塌（高度计算不再无视浮动元素）
+3. 开启BFC，自己不会被其他浮动元素所覆盖（不会与浮动元素重叠，会避开浮动元素排布）
+
+**开启bfc的方式**
+1. 根元素（HTML）默认就是bfc
+2. 设置float属性
+3. 设置position属性（属性值需要是absolute或fixed）
+4. 设置overflow属性（属性值不为visible即可）
+5. 行内块元素（inline-block）
+6. 设置display为flow-root的元素
+7. 伸缩项目（flex盒子内的item）
+8. 多列容器（设置column-count）
+9. 表格元素（table thead tbody tfoot tr th tdcaption)
+10. column-span为all的元素（表格第一行横跨所有列）
+

@@ -206,3 +206,64 @@ console.log(arr.join(''))    // red颜色bLue颜色green颜色
 ```
 
 通常使用这两个函数对数据进行渲染为带html标签的字符串然后再添加到页面中
+
+# requestAnimationFrame
+请求动画帧，它是一个浏览器的宏任务。是浏览器用于定时循环操作的一个API,通常用于动画和游戏开发。它会把每一帧中的所有DOM操作集中起来,在重绘之前一次性更新,并且关联到浏览器的重绘操作。
+是window全局对象上的一个函数
+
+做动画最优的方案是css动画，但是某些特定场景下，css动画无法实现我们所需要的需求。这时，我们就要考虑使用`js`去做动画了，canvas动画的本质是定时器动画，会存在动画抖动的问题
+
+它可以自动获取设备的刷新率，跟随物理帧更新来执行动画
+
+**js动画的缺陷**
+对于60hz刷新率的屏幕来说只需要每隔1000毫秒的60分之一（60HZ）即约为17毫秒，进行一次动画操作即可流畅地显示整个动画
+但是定时器的回调函数，会受到js的事件队列宏任务、微任务影响，计时器设置的延时并不会被精确地调用，如果动画更新超过屏幕刷新的时间比如17毫秒，就只能等待下一帧屏幕刷新时才会显示出来，这样观感上就是在某一帧丢失了动画造成动画卡顿的现象
+
+**为什么requestAnimationFrame不会卡顿**
+1. 它通过系统时间间隔来调用回调函数，无需担心系统负载和阻塞问题，系统会自动调整回调频率。
+2. 回调会在一个高优先级的线程中被同步执行
+3. 由浏览器内部进行调度和优化，性能更高，消耗的CPU和GPU资源更少。
+4. 自动合并多个回调，避免不必要的开销。
+5. 与浏览器的刷新同步，不会在浏览器页面不可见时执行回调。
+
+但是也不能在requestAnimationFrame执行耗时过长的计算，如果回调函数中有大量计算，依旧会导致线程被阻塞从而引起页面卡顿。
+
+**使用**
+requestAnimationFrame调用一次只会执行一次，要让动画播放需要回调执行
+```js
+const animation = () => { 
+	// 执行动画
+	requestAnimationFrame(animation);
+}
+requestAnimationFrame(animation);
+```
+
+# requestIdleCallback
+在网页中，有许多耗时但是却又不能那么紧要的任务。它们和紧要的任务，比如对用户的输入作出及时响应的之类的任务，它们共享事件队列。如果两者发生冲突，用户体验会很糟糕。
+可以使用setTimout，对这些任务进行延迟处理。但是我们并不知道，setTimeout在执行回调时，是否是浏览器空闲的时候。
+
+而requestIdleCallback会在帧结束时并且有空闲时间。或者用户不与网页交互时，执行回调。
+- callback:当callback被调用时，回接受一个参数 deadline，deadline是一个对象，对象上有两个属性
+	timeRemaining：函数，函数的返回值表示当前空闲时间还剩下多少时间
+	didTimeout：布尔值，如果didTimeout是true，那么表示本次callback的执行是因为超时的原因
+- options是一个对象，可以用来配置超时时间
+```js
+requestIdleCallback((deadline) => {
+	// deadline.timeRemaining() 返回当前空闲时间的剩余时间
+	if (deadline.timeRemaining() > 0) {
+		 task()
+	}
+}, { timeout: 500 })
+```
+  如果指定了timeout，但是浏览器没有在timeout指定的时间内，执行callback。在下次空闲时间时，callback会强制执行。并且callback的参数，deadline.didTimeout等于true, deadline.timeRemaining()返回0。
+
+
+
+
+
+
+
+
+
+
+

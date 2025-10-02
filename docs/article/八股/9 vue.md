@@ -852,5 +852,10 @@ reactive代理的是原始对象，因此将对象赋值就是将被代理的原
 ![](attachments/Pasted%20image%2020250921200155.png)
 ![](attachments/Pasted%20image%2020250921200416.png)
 
+# nextTick原理
 
+1. 数据变化触发响应式系统：数据变化后对应的Watcher（观察者）会被通知
+2. 观察者入队列：vue内部维护一个观察者队列，同一个观察者再一个tick内只会更新一次（去重），多次数据变化会被合并
+3. nextTick回调队列：vue内部维护nextTick回调队列多次调用 `nextTick` 会合并回调。
+4. 微任务执行：先执行更新dom，再执行nextTick回调
 
