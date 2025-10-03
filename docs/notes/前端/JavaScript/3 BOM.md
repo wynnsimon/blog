@@ -257,8 +257,30 @@ requestIdleCallback((deadline) => {
 ```
   如果指定了timeout，但是浏览器没有在timeout指定的时间内，执行callback。在下次空闲时间时，callback会强制执行。并且callback的参数，deadline.didTimeout等于true, deadline.timeRemaining()返回0。
 
+# Proxy
 
-
+构造函数接受两个参数
+- 参数一：要代理的对象
+- 参数二：代理的配置，常用的时get和set，get在属性被读取时触发，set在属性修改时触发
+		target：操作的数据对象
+		property：操作的属性名
+		receiver：当前的proxy实例
+		value：要更改的值，set函数中才有的参数
+	
+```js
+const obj = {
+	name:'tom',
+	age:18
+}
+const p=new Proxy(obj,{
+	get(target,property,receiver){
+		return obj[property]
+	},
+	set(target,property,value,receiver){
+		obj[property]=value
+	}
+})
+```
 
 
 
