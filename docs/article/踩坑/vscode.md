@@ -65,3 +65,69 @@ rules:{
 	"space-before-function-paren": 0
 }
 ```
+
+# 在vscode的除settings.json之外的json文件颜色预览器不生效
+
+### 现象
+在 VSCode 里，`"#RRGGBB"` 这样的字符串在 JSON 文件中不会显示颜色预览。
+即使安装了 `Colorize` 等扩展，也可能无效或被覆盖。
+
+### 原因
+
+**内置 ColorProvider 的优先级**
+VSCode 的颜色预览是通过 **ColorProvider** 提供的。 JSON 文件的解析由 **JSON 语言服务**接管。JSON 语言服务只做结构校验（数据类型、必填属性等），**不会自动识别字符串是不是颜色**。因此如果没有 schema 提示，它不会启用颜色预览。
+
+**避免误判**
+JSON 是通用的数据格式。`"#64D103"` 在有些场景是颜色，但在另一些场景可能是 ID、哈希、验证码等。如果无脑对所有 `"#xxxxxx"` 上色，可能会误导用户。
+
+只有当 schema 明确声明这是颜色字段时，才显示颜色预览。
+
+**解决方案**
+可以通过 `json.schemas` 绑定 schema 文件。
+Schema 里如果写了：`"format": "color"`那么 VSCode 才会对这个属性启用颜色预览。
+
+**实践**
+目录结构
+```
+your-project/
+├── .vscode/
+├── ├── theme-schema.json    # 自定义 JSON Schema，声明颜色字段
+│   └── settings.json        # VSCode 工作区配置，绑定 schema
+├── starry-night-theme.json  # 你的 VSCode 主题文件
+└── other-config.json        # 其他 JSON 文件（也能享受颜色预览）
+```
+
+theme-schema.json
+```json
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VSCode Theme Schema (Custom)",
+  "type": "object",
+  "properties": {
+    "colors": {
+      "type": "object",
+      "patternProperties": {
+        ".*": {
+          "type": "string",
+          "format": "color"
+        }
+      }
+    }
+  }
+}
+```
+
+settings.json
+```json
+{
+	// ...... 其他配置
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "*.json"
+      ],
+      "url": "./.vscode/theme-schema.json"
+    }
+  ]
+}
+```
