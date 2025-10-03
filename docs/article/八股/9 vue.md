@@ -859,3 +859,30 @@ reactive代理的是原始对象，因此将对象赋值就是将被代理的原
 3. nextTick回调队列：vue内部维护nextTick回调队列多次调用 `nextTick` 会合并回调。
 4. 微任务执行：先执行更新dom，再执行nextTick回调
 
+# 样式隔离原理
+
+1. 作用域样式（Scoped Styles）：
+在 Vue 单文件组件中，可以使用 scoped 特性将样式限定于当前组件的作用域。使用标签包裹的样式只对当前组件起作用，不会影响其他组件或全局样式。Vue 实现作用域样式的方式是通过给每个选择器添加一个唯一的属性选择器，以确保样式仅适用于当前组件。
+自动生成一个唯一的哈希值，并在编译时为该组件的所有html元素添加一个 `data-v-hash` 的属性，同时将组件内的所有 css 选择器末尾加上 `[data-v-hash]` 属性选择器，保证样式仅在当前组件的元素上生效。
+```vue
+<style scoped></style>
+```
+
+2. CSS Modules：
+在 Vue 单文件组件中，可以借助 module 特性启用 CSS Modules 功能，在样式文件中使用类似 :local(.className) 的语法来定义局部样式。CSS Modules 会自动生成唯一的类名，并在编译时将类名与元素关联起来，从而实现样式的隔离和局部作用域。
+```vue
+<style module></style>
+```
+2. CSS-in-JS 方案：
+结合 CSS-in-JS 库（如 styled-components、emotion 等）来实现样式的隔离。直接在组件代码中编写样式，并通过 JavaScript 对象或模板字符串的形式动态生成样式。
+```vue
+<template>
+  <div :style="componentStyle"></div>
+</template>
+
+<script setup>
+const componentStyle = {
+	width:100px
+}
+</script>
+```
