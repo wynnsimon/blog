@@ -98,20 +98,41 @@ your-project/
 ```
 
 theme-schema.json
+规则：将所有json属性递归，匹配到#开头6或8位字符在0-f或0-F的字符串解析应用颜色预览
 ```json
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "VSCode Theme Schema (Custom)",
+  "$id": "http://example.com/schemas/universal-color-schema.json",
+  "title": "Universal Recursive Color Schema",
   "type": "object",
-  "properties": {
-    "colors": {
-      "type": "object",
-      "patternProperties": {
-        ".*": {
+  "patternProperties": {
+    ".*": { "$ref": "#/definitions/colorOrAny" }
+  },
+  "additionalProperties": true,
+  "definitions": {
+    "colorOrAny": {
+      "anyOf": [
+        {
           "type": "string",
+          "pattern": "^#([0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$",
           "format": "color"
+        },
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        { "type": "null" },
+        {
+          "type": "array",
+          "items": { "$ref": "#/definitions/colorOrAny" }
+        },
+        {
+          "type": "object",
+          "patternProperties": {
+            ".*": { "$ref": "#/definitions/colorOrAny" }
+          },
+          "additionalProperties": true
         }
-      }
+      ]
     }
   }
 }
@@ -124,7 +145,7 @@ settings.json
   "json.schemas": [
     {
       "fileMatch": [
-        "*.json"
+        "theme/*.json" // 应用到theme下所有json文件
       ],
       "url": "./.vscode/theme-schema.json"
     }
