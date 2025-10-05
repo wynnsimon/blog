@@ -108,3 +108,24 @@ ServiceWorker在第一次注册的时候会触发
 4. message
 和之前的worker一样是和主线程通信的
 
+# 结构化克隆
+在WebWorker与主线程通信时发送的数据是结构化克隆，深拷贝的效果，但是C++底层实现的。所以发送数据应避免发送过大的数据
+
+### 可转移对象（Transferable Objects）
+
+如果必须传递大数据，推荐使用 Transferable Objects（可转移对象，如 `ArrayBuffer`、`MessagePort`、`ImageBitmap`），它可以在 `postMessage` 时通过 `转移（transfer）`而非复制来传输。这样可以 **零拷贝**，避免大的开销。
+
+常见的可转移对象有：
+- ArrayBuffer
+- MessagePort
+- ImageBitmap
+
+特点：
+- 零拷贝：数据的所有权直接转移到 Worker
+- 避免 GC 压力：主线程的 buffer 立即失效，不再占内存
+- 高效：非常适合传输二进制数据（例如音视频流、图片、typed array）
+
+
+但是，如果要传输给 **Web Worker** 的数据本身不是 **可转移对象**，这个时候我们就需要将这些数据编码为 `ArrayBuffer`，然后在**Web Worker** 对 `ArrayBuffer` 的数据进行解码。
+而在某些场景下编码和解码的成本比结构化克隆的成本更高
+
