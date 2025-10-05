@@ -282,6 +282,48 @@ const p=new Proxy(obj,{
 })
 ```
 
+# Reflect
+Reflect 是一个内置对象，提供了一系列操作对象的方法，这些方法都是静态的（类似 Math），使用 Reflect 的方法可以做一些对象的基本操作。
+
+反射是**在程序运行中获取和动态操作自身内容**的一项技术。其实对于 JavaScript 来说在出现 Reflect 之前就已经有反射的能力了，我们可以使用 `Object.keys` 获取对象属性，可以使用 `Object.defineProperty` 定义属性，这些实际上都是反射的能力。既然已经可以实现反射功能，那为什么还需要有 Reflect 呢？
+
+**为什么要有反射**
+1. 将`Object`对象的一些明显属于语言内部的操作（比如`Object.defineProperty`），放到`Reflect`对象上。现阶段，某些操作同时在`Object`和`Reflect`对象上部署，未来的新方法将只部署在`Reflect`对象上。也就是说，从`Reflect`对象上可以拿到语言内部的方法。
+
+2. 修改某些`Object`函数的返回结果，让其变得更合理。比如，`Object.defineProperty(obj, name, desc)`在无法定义属性时，会抛出一个错误，而`Reflect.defineProperty(obj, name, desc)`则会返回`false`。
+3. 让`Object`操作都变成函数行为。某些`Object`操作是命令式，比如`name in obj`和`delete obj[name]`，而`Reflect.has(obj, name)`和`Reflect.deleteProperty(obj, name)`让它们变成了函数行为。
+4. `Reflect`对象的方法与`Proxy`对象的方法一一对应，只要是`Proxy`对象的方法，就能在`Reflect`对象上找到对应的方法。这就让`Proxy`对象可以方便地调用对应的`Reflect`方法，完成默认行为，作为修改行为的基础。也就是说，不管`Proxy`怎么修改默认行为，你总可以在`Reflect`上获取默认行为。
+
+有了`Reflect`对象以后，很多操作会更易读。
+
+在ES6之前, Javascript一直没有统一的namespace来管理对其他object的操作 比如我们可能使用`Object.keys(car)`获取`car`这个对象的所有属性 但我们会用`property in car`这种形式判断某个属性是否存在于`car`。 这导致了代码上的割裂，反射就提供了一套统一的api用于操作对象
+
+**Reflect 上面的方法：**
+- Reflect.apply(target, thisArg, args)
+- Reflect.construct(target, args)
+- Reflect.get(target, name, receiver)
+- Reflect.set(target, name, value, receiver)
+- Reflect.defineProperty(target, name, desc)
+- Reflect.deleteProperty(target, name)
+- Reflect.has(target, name)
+- Reflect.ownKeys(target)
+- Reflect.isExtensible(target)
+- Reflect.preventExtensions(target)
+- Reflect.getOwnPropertyDescriptor(target, name)
+- Reflect.getPrototypeOf(target)
+- Reflect.setPrototypeOf(target, prototype)
+
+  
+**Reflect其优势在于:**
+1. 函数化所有对象操作
+2. 更丰富的返回值
+3. 更统一的命名
+4. 对于`function apply`更可靠的的支持 - `Reflect.apply(f, obj, args)`
+5. 更好的控制this-binding
+    - `Reflect.set()`
+    - `Reflect.get()`
+6. 与`Proxy`里的操作一一对应
+
 
 
 
