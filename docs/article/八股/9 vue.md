@@ -890,3 +890,8 @@ const componentStyle = {
 }
 </script>
 ```
+
+# 同时兼容vue2和vue3的组件库
+1. 使用vue-demi：要用到的vue的api从vue-demi中导出，vue-demi会在安装完毕后会检查本地vue版本确定导出的api：vue3直接导出vue3，vue2.6以上导出vue2的和@vue/composition-api，vue2.6一下导出vue2的api
+2. 使用vue-compart：vue3兼容vue2
+3. 基于web component做：mdn推出的规范，虽然功能比不上vue、react强大，但是开发的组件由于是基于原生的所以可以兼容任意框架
