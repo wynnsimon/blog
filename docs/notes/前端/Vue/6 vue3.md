@@ -110,6 +110,8 @@ console.log(count.value)
 <div>{{ count }}</div>
 ```
 
+ref的实现方式和reactive的poxy不同，它是自己创建了一个RefImpl的类，在类的内部设置了get和set函数来拦截操作
+
 ### computed
 computed计算属性优化了写法
 只需要将计算属性的逻辑函数传入到computed函数中再赋值给变量就可直接使用变量名获取
