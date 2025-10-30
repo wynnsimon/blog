@@ -15,9 +15,21 @@ react中hook函数的使用规则：
 useState是一个React Hoot函数，它允许我们返回一个状态变量，状态变量一旦发生变化组件的视图UI也会跟着变化（数据驱动视图）
 类似于vue的ref
 
+用于简单的数据类型：数字、字符串、布尔值等
+
 使用useState绑定一个变量会返回一个对象，这个对象包含对该变量的setter和getter（本身）
 ```tsx
 const [count,setCount]=useState(0)
+```
+
+## useReducer
+和useState一样也是用于管理状态的，但是与useState不同的是它是集中式的管理状态，一般用于复杂的数据类型：对象、数组
+
+- reducer：处理函数，对于状态的处理会走这个函数，初始时不会执行，调用dispatch才会触发reducer的执行
+- initialArg：默认值
+- init：初始化函数，如果没有写初始化函数那么就会使用默认值，如果写了初始化函数那么就会使用初始化函数返回的值
+```jsx
+const [state,dispatch]=useReducer(reducer,initialArg,init?) 
 ```
 
 ## useRef
@@ -83,6 +95,58 @@ useEffect、useMemo、useCallback的第二个参数依赖列表作用都是一�
 ## useContext
 useContext并不能创建context，它只是更简便地使用context，创建context依旧需要createContext
 
+## useImmer
+使用原生的useState和useReducer管理状态是比较麻烦的
+useImmer是基于immer.js这个库实现的，它可以高效地复制对象，并在在更改新对象是不会修改原对象
+
+它提供两个hooks：useImmer、useImmerReducer
+用法和原生的hooks差不多
+但原生的要修改状态需要对对象和数组进行解构，并且更新深层属性时需要精准地找到要修改的属性，并且再将不需要修改的属性重新解构
+
+使用useImmer就可以像操作vue的响应式变量一样以直接操作的形式来修改，但是底层并不是直接修改的原对象，而是新拷贝的对象
+
+## useSyncExternalStore
+useSyncExternalStore是React18引l入的一个Hook，用于从外部存储（例如状态管理库、浏览器API等）获取状态并在组件中同步显示。这对于需要跟踪外部状态的应用非常有用。
+
+**场景：**
+1. 订阅外部store例如（redux，Zustand）
+2. 订阅浏览器API例如（online,storage，ocation）等
+3. 抽离逻辑，编写自定义hooks
+4. 服务端道染支持
+
+- subscribe：用来订阅数据源的变化，接收一个返回值回调函数用于取消订阅。
+- getSnapshot：获取当前数据源的快照（当前状态）。
+- getServerSnapshot?：在服务器端染时用来获取数据源的快照。
+返回值：该res的当前快照，可以在渲染逻辑中使用
+```jsx
+const res=useSyncExternalStore(subscribe,getSnapshot,getServerSnapshot?)
+```
+
+## useTransition
+useTransition是React18中引l入的一个Hook，用于管理UI中的过渡状态，特别是在处理长
+时间运行的状态更新时。它允许你将某些更新标记为”过渡”状态，这样React可以优先处理更重要的更新，比如用户输入，同时延迟处理过渡更新。
+
+- isPending（boolean）是否存在待处理的transition。
+- startTransition（function）使用此函数将状态更新标记为transition。
+```jsx
+const [isPending,startTransition]=useTransition()
+```
+
+## useDeferredValue
+
+用于延迟某些状态的更新，直到主染任务完成。这对于高频更新的内容（如输入框、滚动等）非常有用，可以让UI更加流畅，避免由于频繁更新而导致的性能问题。
+
+**useTransition和useDeferredValue的区别：**
+useTransition和useDeferredvalue都涉及延迟更新，但它们关注的重点和用途略有不同：
+- useTransition主要关注点是状态的过渡。它允许开发者控制某个更新的延迟更新，还提供了过渡标识，让开发者能够添加过渡反馈。
+- useDeferredValue主要关注点是单个值的延迟更新。它允许你把特定状态的更新标记为低优先级。
+
+- value：延迟更新的值（支持任意类型）
+- deferredValue：延迟更新的值，在初始渲染期间，返回的延迟值将与您提供的值相同
+```jsx
+const defferedValue=useDefferedValue()
+```
+
 ## 自定义hook函数
 hook函数就是use开头的一系列函数，用户也可以自己封装重复的逻辑为一个hook函数
 类似于vue的自定义指令，但react中更贴近于自己封装函数
@@ -120,4 +184,5 @@ function App(){
 类似于vue中的mixin当我们发现某个操作逻辑，或者某个运算经常出现的时候，我们可以提取为高阶组件
 
 - 组件：既包含了ui界面的复用，也包含了逻辑的复用
-- 高阶组件：只是复用操作逻辑，，运算
+- 高阶组件：只是复用操作逻辑，运算
+
