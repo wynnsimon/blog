@@ -1,0 +1,9 @@
+# fiber
+fiber的实现原理是postMessage+requestAnimationFrame
+为什么不用requestIdleCallback：因为相关人员经过调研发现requestIdleCallback还是有可能超过20ms执行的
+而requestAnimationFrame是在可以一直保持16.6ms执行的
+为什么不用setTimeout：因为setTimeout的0也依旧需要4ms时间，其次因为事件循环也会有其他的优先级更高的任务执行导致setTimeout更晚执行
+
+
+
+
