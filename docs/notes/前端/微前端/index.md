@@ -111,6 +111,85 @@ single-spa 提供了一个加载和管理多个子应用的机制，这些子应
 **缺点**
 - 需要webpack5。
 
+### 配置
+一下展示使用rspack
+1. 远程组件配置
+```js
+import { defineConfig } from "@rsbuild/core";
+import { rspack } from "@rsbuild/core";
+
+export default defineConfig({
+  server: {
+    port: 3000,
+    cors: true,
+  },
+  source: {
+    entry: {
+      index: "./index.js",
+    },
+  },
+  tools: {
+    rspack: {
+      output: {
+        publicPath: "http://localhost:3000/", //指定导出的路径
+      },
+      plugins: [
+        new rspack.container.ModuleFederationPlugin({
+          name: "nav", // 服务名
+          filename: "remoteEntry.js",
+          remotes: {},
+          exposes: {
+            "./header": "./header.js", // 导出的组件名
+          },
+          shared: {},
+        }),
+      ],
+    },
+  },
+});
+```
+在导出的组件文件中其内部需要有默认导出的组件
+
+2. 主应用导入配置
+```js
+import { defineConfig } from "@rsbuild/core";
+import { rspack } from "@rsbuild/core";
+
+export default defineConfig({
+  server: {
+    port: 3001,
+  },
+  source: {
+    entry: {
+      index: "./index.js",
+    },
+  },
+  tools: {
+    rspack: {
+      plugins: [
+        new rspack.container.ModuleFederationPlugin({
+          name: "home",
+          remotes: {
+            nav: "nav@http://localhost:3000/remoteEntry.js", //远程导入组件的路径
+          },
+          exposes: {},
+          shared: {},
+        }),
+      ],
+    },
+  },
+});
+```
+
+3. 在文件中导入
+```js
+import("nav/header").then((mod) => { //需要与配置的组件名一致
+  const headerEl = mod.default();
+  document.body.appendChild(headerEl);
+});
+```
+导入是异步导入返回的promise，调用其上面的default函数获取默认导出的组件
+
 # qiankun
 基于single-spa 构建，但提供了更多功能来简化微前端的开发过成。它的设计目标是提供一个更简便、更稳定的微前端解决方案，能够支持更多的应用场景和更高的性能
 
