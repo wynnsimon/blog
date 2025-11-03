@@ -68,10 +68,34 @@ commit阶段总是同步执行
 
 hook本质：一套能够使函数组件更强大、更灵活的“钩子”
 
+使用原则：只在react函数中调用hooks，不能再循环、条件或嵌套函数中调用hooks
 
+hooks调用顺序必须是确定的
+### 以useState为例介绍hooks调用流程：
+挂载时
+1. 调用useState
+2. 通过resolveDispatcher获取dispatcher
+3. dispatcher.useState()
+4. 调用mountState：将数据挂载到单向链表上
+5. 返回目标数组（[state,useState]）
 
+更新时
+1. 调用useState
+2. 通过resolveDispatcher获取dispatcher
+3. dispatcher.useState()
+4. 调用updateState：按顺序去遍历之前构建好的链表，去除对应的数据信息进行渲染
+5. 调用updateReducer
+6. 返回目标数组（[state,useState]）
 
+# setState
+setState更新是异步更新的，reduce中的setState是同步更新的
 
+![](attachments/Pasted%20image%2020251103143313.png)
+setState更新后就会调用组件更新的生命周期，而render中dom更新会有很大的性能开销，如果每次调用setState都进行更新性能开销较大。因此setState是批量更新的（类似于vue中的nextTick），每进行一次setState就将其放入队列，等时机成熟就将他们合并然后一起更新
 
+在React钩子函数及合成事件中，它表现为异步
+在setTimeout、setlnterval等函数中，包括在DOM原生事件中，它都表现为同步
 
-
+**为什么reduce中的setState是同步的**：
+因为在reduce中将setState放到了setTimeout中执行了
+setTimeout帮助setState逃脱了react的掌控，在react管控下的setState是异步的
