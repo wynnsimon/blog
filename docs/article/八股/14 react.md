@@ -99,3 +99,36 @@ setState更新后就会调用组件更新的生命周期，而render中dom更新
 **为什么reduce中的setState是同步的**：
 因为在reduce中将setState放到了setTimeout中执行了
 setTimeout帮助setState逃脱了react的掌控，在react管控下的setState是异步的
+
+# ReacDOM.render是如何串联渲染链路的
+
+## 渲染模式
+
+legacy 模式: 
+普通模式
+没有采用fiber架构
+```jsx
+ReactDOM.render(<App />, rootNode)
+```
+blocking 模式:
+过渡模式
+用于普通模式过渡到最新的模式
+```jsx
+ReactDOM.createBlockingRoot(rootNode).render(<App />)
+```
+concurrent 模式:
+最新模式
+采用最新的技术
+```jsx
+ReactDOM.createRoot(rootNode).render(<App />)
+```
+
+
+
+
+
+
+
+
+
+
