@@ -123,9 +123,14 @@ concurrent 模式:
 ReactDOM.createRoot(rootNode).render(<App />)
 ```
 
+# 性能优化
 
+# memo
+接受一个组件，返回一个被包装后的组件：当组件的props没有发生变化时就会拦截渲染
+这里的比较是一个浅比较
 
-
+## PureComponent
+是React的类组件，相当于自带memo的Component类，它的内部自带了一个shouldComponentUpdate生命周期钩子，在这个生命周期中会做和memo一样的操作：浅比较props和state，如果没有改变则跳过渲染
 
 
 
