@@ -309,8 +309,33 @@ function outer(){
 function() { return 20; }
 ```
 
+# promise和async/await
 
+它们都是用于解决异步编程中的可读性、可维护性、回调地狱问题的
+async/await是基于generator和promise的语法糖，可以用同步的方式写异步的逻辑，让写出的代码更易理解、减少嵌套、易于错误捕获
 
+### promise
+Promise 的核心是让异步流程 **链式（chainable）** 且 **统一错误处理**
 
+**解决的问题**
+1. 回调地狱（嵌套->链式）
+2. 异步错误难以捕获（统一catch）
 
+**优点**
+- 可组合多个异步（Promise.all、race）
 
+**缺点**
+- 链式调用阅读成本虽然比嵌套减少但依旧很高
+- 统一错误处理一旦出现错误依旧挨个调试
+
+### async/await
+
+**优点**
+1. 类同步逻辑的顺序流程更加直观
+2. 内置try/catch，错误捕获更直观
+
+**缺点**
+async/await尽管有以上诸多优点但它也有缺点
+- 异步的传染性比promise更加明显：调用async的函数它本身也需要是async函数
+
+总体来说大部分场景推荐使用async/await，在部分场景（异步传染性）更适合使用promise

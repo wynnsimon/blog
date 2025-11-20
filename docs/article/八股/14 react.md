@@ -1,11 +1,41 @@
-# 生命周期
-
 ## react15
+
+## 架构
+
+React15的架构分为两层：
+- Reconciler（协调器）—— 负责找出变化的组件
+- Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+
+### Reconciler
+当组件的props、state变化时，调用forceUpdate时，父组件更新时都会触发组件的更新
+
+每当有更新发生时，**Reconciler**会做如下工作：
+- 调用函数组件、或 class 组件的`render`方法，将返回的 JSX 转化为虚拟 DOM
+- 将虚拟 DOM 和上次更新时的虚拟 DOM 对比
+- 通过对比找出本次更新中变化的虚拟 DOM
+- 通知**Renderer**将变化的虚拟 DOM 渲染到页面上
+
+### Renderer
+react支持跨平台，在不同的平台拥有不同的renderer：
+- [ReactNative](https://www.npmjs.com/package/react-native)渲染器，渲染 App 原生组件
+- [ReactTest](https://www.npmjs.com/package/react-test-renderer)渲染器，渲染出纯 Js 对象用于测试
+- [ReactArt](https://www.npmjs.com/package/react-art)渲染器，渲染到 Canvas, SVG 或 VML (IE8)
+在每次更新发生时，**Renderer**接到**Reconciler**通知，将变化的组件渲染在当前宿主环境。
+
+### 当前架构的缺点
+mount的组件会调用mountComponent，update的组件会调用updateComponent。这两个方法都会==递归更新子组件。==
+由于递归执行，所以更新一旦开始，中途就无法中断。当层级很深时，递归更新时间超过了 16ms，用户交互就会卡顿。
+
+除此之外，react15并不会终端进行中的更新，但因为特殊情况中断更新就会出现意外的效果：只渲染出了一部分的更新
+而我们期望的通常是：停止后续的更新的任务，完成当前正在执行的更新
+
+## 生命周期
 render生命周期并不会操作真实dom，它会把要渲染的内容返回出来，经过ReactDOM.render()统一更新
 ![](attachments/Pasted%20image%2020251103110114.png)
 
+# react16.8
 
-## react16.8之后
+## 生命周期
 ![](attachments/Pasted%20image%2020251103110220.png)
 
 
@@ -28,20 +58,61 @@ getSnapshotBeforeUpdate 的返回值会作为第三个参数给到 componentDidU
 
 替代componentWillUpdate
 
-# fiber
-react渲染是同步渲染的，一次更新较大的渲染就会长时间阻塞主线程，带来用户体验的大幅度下降
+## fiber架构
+
+主流浏览器刷新频率为 60Hz，即每（1000ms / 60Hz）16.6ms 浏览器刷新一次。
+每16.6ms时间内需要完成如下工作：js脚本执行-样式布局-样式绘制
+`GUI渲染线程`与`JS线程`是互斥的。所以**JS 脚本执行**和**浏览器布局、绘制**不能同时执行。
+当 JS 执行时间过长，超出了 16.6ms，这次刷新就没有时间执行**样式布局**和**样式绘制**了，也就造成了肉眼看到的掉帧和卡顿
 
 fiber架构的引入就是为了解决这个问题
+react15架构不能支持异步更新以至于需要重构
 
-## 原理
-1. 时间切片：fiber会将一个大的更新任务拆解成许多小任务，每次执行完小人物都会先是否主线程，去处理优先级更高的任务
+React16 架构可以分为三层：
+- Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入Reconciler
+- Reconciler（协调器）—— 负责找出变化的组件
+- Renderer（渲染器）—— 负责将变化的组件渲染到页面上
 
-fiber的实现原理是postMessage+requestAnimationFrame
+### Scheduler
+设计出发点是：以浏览器是否有剩余时间作为任务中断的标准
+那么我们需要一种机制，当浏览器有剩余时间时通知我们。
 
-- 为什么不用requestIdleCallback：经过调研发现requestIdleCallback还是有可能超过20ms执行的，而requestAnimationFrame是在可以一直保持16.6ms执行的
-- 为什么不用setTimeout：因为setTimeout的0也依旧需要4ms时间，其次因为事件循环也会有其他的优先级更高的任务执行导致setTimeout更晚执行
+与之非常契合的api是：requestIdleCallback，但由于一下因素react官方放弃使用：
+- 浏览器兼容性
+- 触发频率不稳定，受很多因素影响。比如当我们的浏览器切换 tab 后，之前 tab 注册的`requestIdleCallback`触发的频率会变得很低
+- 经过调研发现requestIdleCallback还是有可能超过16.6ms执行的
 
-## 思想
+基于以上原因，react官方实现了功能更加完备的polyfill，核心原理是：postMessage+requestAnimationFrame
+除了在空闲时触发回调的功能外，**Scheduler**还提供了多种调度优先级供任务设置。
+
+### Reconciler
+在 React15 中**Reconciler**是递归处理虚拟 DOM 的。
+而在React16中更新工作从递归变成了可以中断的循环过程。每次循环都会调用`shouldYield`判断当前是否有剩余时间。
+
+在 React16 中，**Reconciler**与**Renderer**不再是交替工作。当**Scheduler**将任务交给**Reconciler**后，**Reconciler**会为变化的虚拟 DOM 打上代表增/删/更新的标记，类似这样：
+```js
+export const Placement = /*             */ 0b0000000000010;
+export const Update = /*                */ 0b0000000000100;
+export const PlacementAndUpdate = /*    */ 0b0000000000110;
+export const Deletion = /*              */ 0b0000000001000;
+```
+==整个**Scheduler**与**Reconciler**的工作都在内存中进行==。只有当所有组件都完成**Reconciler**的工作，才会统一交给**Renderer**
+
+scheduler和reconciler的工作随时可能因为以下原因被中断：
+- 有其他更高优任务需要先更新
+- 当前帧没有剩余时间
+
+由于它们中的工作都在内存中进行，不会更新页面上的 DOM，所以即使反复中断，用户也不会看见更新不完全的 DOM。
+
+### Renderer
+**Renderer**根据**Reconciler**为虚拟 DOM 打的标记，同步执行对应的 DOM 操作。
+
+### 心智模型
+
+**代数效应（Algebraic Effects）**
+
+
+### 思想
 
 也因此react16.8的生命周期分为三个阶段：render、precommit、commit
 render阶段允许被打断（被fiber时间分片执行）
