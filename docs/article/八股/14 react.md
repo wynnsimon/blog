@@ -84,7 +84,7 @@ React16 架构可以分为三层：
 - 触发频率不稳定，受很多因素影响。比如当我们的浏览器切换 tab 后，之前 tab 注册的`requestIdleCallback`触发的频率会变得很低
 - 经过调研发现requestIdleCallback还是有可能超过16.6ms执行的
 
-基于以上原因，react官方实现了功能更加完备的polyfill，核心原理是：postMessage+requestAnimationFrame
+基于以上原因，react官方实现了功能更加完备的polyfill，核心原理是：MesssageChannel的postMessage+requestAnimationFrame
 除了在空闲时触发回调的功能外，**Scheduler**还提供了多种调度优先级供任务设置。
 
 ### Reconciler
