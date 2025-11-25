@@ -14,6 +14,7 @@ React15的架构分为两层：
 - 将虚拟 DOM 和上次更新时的虚拟 DOM 对比
 - 通过对比找出本次更新中变化的虚拟 DOM
 - 通知**Renderer**将变化的虚拟 DOM 渲染到页面上
+- 没有优先级和中断机制，递归对比时会锁定页面
 
 ### Renderer
 react支持跨平台，在不同的平台拥有不同的renderer：
@@ -21,6 +22,11 @@ react支持跨平台，在不同的平台拥有不同的renderer：
 - [ReactTest](https://www.npmjs.com/package/react-test-renderer)渲染器，渲染出纯 Js 对象用于测试
 - [ReactArt](https://www.npmjs.com/package/react-art)渲染器，渲染到 Canvas, SVG 或 VML (IE8)
 在每次更新发生时，**Renderer**接到**Reconciler**通知，将变化的组件渲染在当前宿主环境。
+
+![](attachments/Pasted%20image%2020251125201629.png)
+
+Reconciler和Renderer是交替工作的，当第一个li在页面上已经变化后，第二个li再进入Reconciler。
+由于整个过程都是同步的，所以在用户看来所有DOM是同时更新的，但更新过程中，用户继续输入2，就不会马上响应，需要等到更完成后输入框中才能出现2。
 
 ### 当前架构的缺点
 mount的组件会调用mountComponent，update的组件会调用updateComponent。这两个方法都会==递归更新子组件。==
@@ -83,6 +89,8 @@ React16 架构可以分为三层：
 - 浏览器兼容性
 - 触发频率不稳定，受很多因素影响。比如当我们的浏览器切换 tab 后，之前 tab 注册的`requestIdleCallback`触发的频率会变得很低
 - 经过调研发现requestIdleCallback还是有可能超过16.6ms执行的
+- 调试困难：更新会在浏览器空闲时才触发，无法预测更新的时间点
+- 需要自行实现优先级处理：requestIdleCallback不支持任务优先级
 
 基于以上原因，react官方实现了功能更加完备的polyfill，核心原理是：MesssageChannel的postMessage+requestAnimationFrame
 除了在空闲时触发回调的功能外，**Scheduler**还提供了多种调度优先级供任务设置。
@@ -99,6 +107,8 @@ export const PlacementAndUpdate = /*    */ 0b0000000000110;
 export const Deletion = /*              */ 0b0000000001000;
 ```
 ==整个**Scheduler**与**Reconciler**的工作都在内存中进行==。只有当所有组件都完成**Reconciler**的工作，才会统一交给**Renderer**
+
+![](attachments/Pasted%20image%2020251125201945.png)
 
 scheduler和reconciler的工作随时可能因为以下原因被中断：
 - 有其他更高优任务需要先更新
