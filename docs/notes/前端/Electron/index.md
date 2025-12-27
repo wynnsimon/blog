@@ -114,7 +114,7 @@ enableRemoteModule: true
 - ready:app初始化完成
 - dom-ready:一个窗口中的文本加载完成
 - did-finsh-load:导航完成时触发
-- window-all-closed:所有窗口都被关闭时触发
+- window-all-closed:所有窗口都被关闭时触发（默认是关闭app，如果监听了这个生命周期就需要自己决定是否关闭app，如果没关闭app则后续的生命周期将不会执行）
 - before-quit:在关闭窗口之前触发
 - will-quit:在窗口关闭并且应用退出时触发
 - quit:当所有窗口被关闭时触发
