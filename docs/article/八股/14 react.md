@@ -123,7 +123,6 @@ scheduler和reconciler的工作随时可能因为以下原因被中断：
 
 **代数效应（Algebraic Effects）**
 
-
 ### 思想
 
 也因此react16.8的生命周期分为三个阶段：render、precommit、commit
@@ -179,9 +178,28 @@ setState更新后就会调用组件更新的生命周期，而render中dom更新
 在React钩子函数及合成事件中，它表现为异步
 在setTimeout、setlnterval等函数中，包括在DOM原生事件中，它都表现为同步
 
-**为什么reduce中的setState是同步的**：
-因为在reduce中将setState放到了setTimeout中执行了
+**为什么setTimeout中的setState是同步的**：
 setTimeout帮助setState逃脱了react的掌控，在react管控下的setState是异步的
+伪代码如下所示
+```js
+// 在组件中使用setState
+const App = ()=>{
+	const [state,setState] = useState(0)
+	const fn = () => {
+		setTimeout(() => {
+			setState(++state)
+		},0)
+	}
+}
+
+// react执行函数
+// 执行前先上锁
+isBatchingUpdates = false
+fn()
+isBatchingUpdates = true
+```
+在正常的react管理的setState中，应该是先上锁，执行完setState后再解锁
+但在使用setTimeout后导致先上锁，接着把setState放入到异步队列中，再解锁，把setState的任务取出来时已经是解锁状态了，所以呈现出setTimeout中执行的setState是同步的
 
 # ReacDOM.render是如何串联渲染链路的
 
