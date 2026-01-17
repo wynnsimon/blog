@@ -94,6 +94,7 @@ React16 架构可以分为三层：
 
 基于以上原因，react官方实现了功能更加完备的polyfill，核心原理是：MesssageChannel的postMessage+requestAnimationFrame
 除了在空闲时触发回调的功能外，**Scheduler**还提供了多种调度优先级供任务设置。
+raf是在浏览器==重绘==之前执行，MessageChannel的postMessage是宏任务
 
 ### Reconciler
 在 React15 中**Reconciler**是递归处理虚拟 DOM 的。
