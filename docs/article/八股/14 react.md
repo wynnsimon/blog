@@ -234,8 +234,26 @@ ReactDOM.createRoot(rootNode).render(<App />)
 ## PureComponent
 是React的类组件，相当于自带memo的Component类，它的内部自带了一个shouldComponentUpdate生命周期钩子，在这个生命周期中会做和memo一样的操作：浅比较props和state，如果没有改变则跳过渲染
 
+# 受控组件和非受控组件
 
+- 受控组件：表单数据是由react控制的是受控组件
+- 非受控组件：表单数据不由react控制，由dom自己管理的组件是非受控组件
 
+**受控组件**
+```jsx
+const App=()=>{
+	const [value,setValue]=useState('')
+	return <form>
+		<input value={value}/>
+	</form>
+}
+```
+为表单绑定上state后就无法通过dom本身修改state的值了，只能使用react的setState函数来修改
+```jsx
+<input value={value} onChange={(val)=>setValue(val)}/>
+```
 
-
-
+受控组件的优点：
+1. 集中化的状态管理
+2. 更好的表单验证
+3. 一致的ui改变
