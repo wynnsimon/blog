@@ -243,6 +243,86 @@ import("nav/header").then((mod) => { //需要与配置的组件名一致
 </script>
 ```
 
+## 原理
+微前端的原理就是请求到组件的js代码，拿到本页面中执行，不同子应用切换的原理就是用代理拦截全局window对象，只保留公共的api，对于每个子应用特有的api使用代理代理到别的对象身上，如果子应用切换，那么代理也跟随切换，这样实现子应用可以访问到自己需要的api而不会出现意外的api
+
+### 沙箱隔离
+- css严格隔离：将子应用创建在shadowDOM中，可以实现样式的严格隔离，但会造成一些问题，比如组件库的弹窗或者消息正常来说是注册在根组件的，但使用这种方式隔离的话，组件库的弹窗以及消息就会注册在shadowDOM的根组件中，也就是只对当前子应用生效，对于其他的子应用就不生效了
+- css非严格隔离：在样式的选择器前加一个根标签id的选择器，这样子应用的样式就会只对子应用生效了，而组件库注册的弹窗和消息也是注册在主应用的根标签中就能够覆盖到其他子应用了
+
+## 应用通信
+
+### initGlobalState
+主应用
+```js
+import { initGlobalState } from 'qiankun';
+
+// 初始化全局状态
+const actions = initGlobalState({
+  user: { name: 'Alice', age: 25 },
+  theme: 'light',
+});
+
+// 监听状态变化
+actions.onGlobalStateChange((state, prev) => {
+  console.log('状态改变了', state, prev);
+});
+
+// 修改状态
+actions.setGlobalState({ theme: 'dark' });
+```
+子应用
+```js
+export async function mount(props) {
+  // 获取通信方法
+  props.onGlobalStateChange((state, prev) => {
+    console.log('子应用收到状态', state);
+  });
+  
+  // 修改状态
+  props.setGlobalState({ user: { name: 'Bob' } });
+}
+```
+
+### 注册时使用props
+主应用
+```js
+registerMicroApps([
+  {
+    name: 'app1',
+    entry: '//localhost:3001',
+    container: '#container',
+    activeRule: '/app1',
+    props: {
+      data: { msg: 'Hello from main app' },
+      methods: {
+        sayHello: () => alert('Hello!'),
+      },
+    },
+  },
+]);
+```
+子应用
+```js
+export async function mount(props) {
+  console.log(props.data.msg); // 'Hello from main app'
+  props.methods.sayHello();     // 调用主应用的方法
+}
+```
+
+### 自定义事件
+```js
+// 子应用 A 发送事件
+window.dispatchEvent(new CustomEvent('app-message', {
+  detail: { msg: 'Hello from App A' },
+}));
+
+// 子应用 B 接收事件
+window.addEventListener('app-message', (e) => {
+  console.log(e.detail.msg);
+});
+```
+
 # wujie
 背景
 Wujie是由中国的美团技术团队开发的一个微前端框架，旨在提供轻量级的微前端解决方案，具有高性能、易用性和灵活性。它能够处理多种类型的微前端场景，支持沙箱隔离、跨应用共享状态等。
