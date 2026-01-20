@@ -356,11 +356,6 @@ watch则是监控值的变化，当值发生变化时调用对应的回调函数
 - watch侦测一个或多个响应式数据源并在数据源变化时调用一个回调函数。
 
 二者本质上都是基于ReactiveEffect实现的，差异并不大。watch在于数据变了允许用户对新旧数据进行处理，watchEffect在于数据改变时重新执行函数中的逻辑
-# ref和reactive的区别
-- reactive用于处理对象类型的数据响应式。底层采用的是Proxy
-- ref通常用于处理单值的响应式，ref主要解决原始值的响应式问题。底层采用的是Object.defineProperty实现的。
-
-由于reactive是基于proxy实现的，因此它无法处理基础数据类型，这时就只能使用ref了
 
 # new Vue的过程
 1. 在newVue的时候内部会进行初始化操作。
@@ -852,7 +847,19 @@ onMounted(()=>{
 })
 ```
 ref定义了一个类（`RefImpl`），它在 get/set 这两个操作里做了依赖收集和触发更新。因此数据指向以及内容改变都会被监听到
-reactive代理的是原始对象，因此将对象赋值就是将被代理的原始对象替换到，替换后的reactive数据就不是响应式数据了
+```ts
+class RefImpl<T>{
+	private _value:T
+	private _rawValue:T
+	public dep?:Dep=undefined
+	public readonly __v_isRef=true
+	constructor(value:T,public readonly __v_isShallow:boolean){}
+	get value(){}
+	set value(newVal){}
+}
+
+```
+reactive使用proxy代理原始对象，因此将对象赋值就是将被代理的原始对象替换到，替换后的reactive数据就不是响应式数据了
 ![](attachments/Pasted%20image%2020250921200155.png)
 ![](attachments/Pasted%20image%2020250921200416.png)
 
