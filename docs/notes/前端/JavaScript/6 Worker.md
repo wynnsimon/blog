@@ -5,6 +5,24 @@ permalink: /front/js/6/
 ---
 
 ![](attachments/Pasted%20image%2020250927164017.png)
+允许在浏览器中运行**后台线程**（即“工作线程”），用于执行**耗时的 JavaScript 任务**，而不会阻塞主线程（也就是 UI 线程）
+它提供给了js伪多线程的能力，除此之外，它还具有自己的上下文（`DedicatedWorkerGlobalScope` 或 `SharedWorkerGlobalScope`），与主线程隔离。通过 `postMessage()` 和 `onmessage` 事件进行**消息传递**（结构化克隆算法）来与主线程或其他 Workers 通信。
+
+适合cpu密集型，非ui相关的任务
+通常用于以下场景：
+- 大量计算
+- 长时间运行的任务
+- 轮询或定时任务
+- 游戏逻辑
+- 离线数据处理
+
+**局限性：**
+- 无法访问dom：DOM 操作不是线程安全的。如果多个线程同时修改 DOM，会导致不可预测的状态和渲染错误。
+- 不能访问主线程中的变量和函数：Worker 运行在完全独立的 JavaScript 执行环境中，有自己的全局作用域
+- 通信开销
+- 调试困难
+- 同源限制
+- 不支持一些webapi
 
 # WebWorker
 专用工作线程
