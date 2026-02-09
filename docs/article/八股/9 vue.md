@@ -951,4 +951,5 @@ Vue 3
 1. 安全性保障：reflect中提供的api和proxy都是一一对应的，Reflect可以更加方便的完成对Proxy代理对象的基本操作
 2. 统一返回操作结果：Object的api返回值含义并不统一，有些执行失败会抛出异常，而Reflect中改善了这个问题，如果执行失败会返回false，能够更灵活的进行处理
 3. this指向问题：在Proxy拦截中，直接操作目标对象（如 `target[key]`）可能导致this指向错误（指向原对象而非代理对象）。而 Reflect方法的最后一个参数receiver可以绑定正确的this指向（即代理对象），确保对象内部方法的this符合预期。
+4. 性能考虑：defineProperty在初始化时会将对象每一次都递归进行劫持，而proxy的劫持时惰性的，只有在访问时才会劫持对应的属性
 
