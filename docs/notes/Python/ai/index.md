@@ -132,10 +132,22 @@ AI Agent（人工智能代理）是一种能够自主感知环境、进行思考
 
 
 
-
-
-
-
+Zestimates出错 [1] Hagerty J R .How Good Are Zillow's Estimates?[J].wall street journal, 2007.
+zillow估价 [2]Hagerty,James,R,et al.How Good Are Zillow's Estimates?[J].Wall Street Journal Eastern Edition, 2007.
+zillow无牌估价 [3] Group B W .A DRY ZONE FOR ZILLOW?[J].BusinessWeek, 2007(4033).
+状态管理 [4] Sehgal J , Yadhav A .A Comparative Study of State Management Libraries: Redux, MobX, Recoil, and Zustand[J].International Journal for Research in Applied Science and Engineering Technology, 2023, 11(9):432-438.DOI:10.22214/ijraset.2023.55677.
+状态管理 [5] Brekalo S , Pap K , Kos F .Characteristics and Comparison of Global State Management Tools in React applications[J].Acta Graphica, 2025, 33(1).DOI:10.25027/ag.33.1.3.
+状态管理 [6] Veeri V .State Management in React: Redux vs Zustand - A Comprehensive Guide[J].International Journal of Scientific Research in Computer Science, Engineering and Information Technology, 2024, 10(6):211-218.DOI:10.32628/cseit24106172.
+node 事件驱动 [7] Basumatary B , Agnihotri N .Benefits and Challenges of Using NodeJS[J].International Journal of Innovative Research in Computer Science & Technology, 2022.DOI:10.55524/ijircst.2022.10.3.13.
+prisma [8] Urkude P , Charde D , Pidurkar S ,et al.Multi-domain Content Generation Using Advanced Machine Learning Techniques[C]//International Conference on Information and Communication Technology for Intelligent Systems.Springer, Singapore, 2024.DOI:10.1007/978-981-97-6675-8_45.
+[9] 清华大学房地产研究中心, 自如研究院, 新华网文化产业研究院. 2025中国城市长租市场发展蓝皮书 [R]. 北京, 2025.
+zillow估价 [10]白林,李涛.从Zillow看美国互联网房地产信息服务[J].金融博览, 2014(17):2.DOI:CNKI:SUN:XXJR.0.2014-09-034.
+二房东乱象 [11]金黎钢,叶俊."二房东"群租经营现象依法治理研究[J].[2026-02-17].
+大学生在线租房实现 [12]裴春杰.大学生在线租房系统的设计与实现[D].北京交通大学[2026-02-17].
+lbs [13]李昭,陈浩,高靖,等.基于LBS租房场景构建推荐引擎的方法:CN201911412207.9[P].CN111161034A[2026-02-17].
+前后端分离 [14]孙娉娉,李新,史广军.基于前后端分离的内容管理系统[J].科研信息化技术与应用, 2016, 7(4):6.DOI:10.11871/j.issn.1674-9480.2016.04.009.
+express [15]王伶俐,张传国.基于NodeJS+Express框架的轻应用定制平台的设计与实现[J].计算机科学, 2017, 44(B11):4.DOI:CNKI:SUN:JSJA.0.2017-S2-129.
+[16]程彬,段浩宇,董炜华.基于百度地图API的购房平台系统开发[J].长春师范大学学报, 2014.DOI:CNKI:SUN:CCSS.0.2014-08-023.
 
 
 
