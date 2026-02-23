@@ -88,7 +88,9 @@ rag（向量检索：方向一致）的回答：用户给出的查询先发送�
 5. 根据语义进行分割：语义
 
 向量相似度计算：
-余弦距离Cosine：基于两个向量夹角的余弦值来衡量相似度。
+余弦相似度：基于两个向量夹角的余弦值来衡量相似度。
+点积：两个向量的点积越大相似度越大
+欧式距离：一个向量在另一个向量上的映射越长相似度越大
 ![](attachments/Pasted%20image%2020260124141747.png)
 
 ### 向量数据库
@@ -112,6 +114,10 @@ rag（向量检索：方向一致）的回答：用户给出的查询先发送�
 # AI Agent
 AI Agent（人工智能代理）是一种能够自主感知环境、进行思考、做出决策并执行任务的智能软件,与传统聊天机器人不同，AIAgent的系统核心在于具备“代理权”（Agency），能够主动地“做事”，而不仅仅是“回答问题”。
 代理的是一个流程
+
+agent主要包含三部分：模型、主程序、工具
+模型用于思考，主程序用于串联整个流程，让模型判断什么时候该调用什么工具
+
 ![](attachments/Pasted%20image%2020260124145555.png)
 - 规划（Planning）：智能体会把大型任务分解为子任务，并规划执行任务的流程；智能体会对任务执行的过程进行思考和反思，从而决定是继续执行任务，或判断任务完结并终止运行。
 - 记忆（Memory）：短期记忆，是指在执行任务的过程中的上下文，会在子任务的执行过程产生和暂存，在任务完结后被清空。长期记忆是长时间保留的信息，一般是指外部知识库，通常用向量数据库来存储和检索。
@@ -129,25 +135,28 @@ AI Agent（人工智能代理）是一种能够自主感知环境、进行思考
 2. 师生式：由一个专家智能体完成复杂的任务，并将结果交给学生智能体做简单的处理，如精简回答等
 3. 竞争式：不同智能体给出不同的方案，由用户抉择使用哪种方案
 
+# 上下文工程
+上下文窗口（Context Window）表示模型一次能处理的最大信息量，按token计算
+即使上下文足够也不建议将全部的内容都丢给大模型，因为输入的太杂乱会影响模型的理解，输入越多消耗也越多
 
+Context Engineering上下文工程，设计给大模型输入的内容，让模型在有限的上下文窗口中尽可能的理解更加准确，回答的更好，token消耗的更少。核心思想是不改变模型的结构，只改变模型的入参
 
+**为什么需要上下文工程**
+- 大模型足够强大
+- Agent的兴起：agent是把大模型和工具结合起来，让大模型可以独立感知环境影响环境，从而解决用户的问题。在agent中模型循环思考，调用工具，获取结果都会产生大量的上下文，运行的长了这些结果就很容易占满上下文窗口，从而影响到后续的结果
 
-Zestimates出错 [1] Hagerty J R .How Good Are Zillow's Estimates?[J].wall street journal, 2007.
-zillow估价 [2]Hagerty,James,R,et al.How Good Are Zillow's Estimates?[J].Wall Street Journal Eastern Edition, 2007.
-zillow无牌估价 [3] Group B W .A DRY ZONE FOR ZILLOW?[J].BusinessWeek, 2007(4033).
-状态管理 [4] Sehgal J , Yadhav A .A Comparative Study of State Management Libraries: Redux, MobX, Recoil, and Zustand[J].International Journal for Research in Applied Science and Engineering Technology, 2023, 11(9):432-438.DOI:10.22214/ijraset.2023.55677.
-状态管理 [5] Brekalo S , Pap K , Kos F .Characteristics and Comparison of Global State Management Tools in React applications[J].Acta Graphica, 2025, 33(1).DOI:10.25027/ag.33.1.3.
-状态管理 [6] Veeri V .State Management in React: Redux vs Zustand - A Comprehensive Guide[J].International Journal of Scientific Research in Computer Science, Engineering and Information Technology, 2024, 10(6):211-218.DOI:10.32628/cseit24106172.
-node 事件驱动 [7] Basumatary B , Agnihotri N .Benefits and Challenges of Using NodeJS[J].International Journal of Innovative Research in Computer Science & Technology, 2022.DOI:10.55524/ijircst.2022.10.3.13.
-prisma [8] Urkude P , Charde D , Pidurkar S ,et al.Multi-domain Content Generation Using Advanced Machine Learning Techniques[C]//International Conference on Information and Communication Technology for Intelligent Systems.Springer, Singapore, 2024.DOI:10.1007/978-981-97-6675-8_45.
-[9] 清华大学房地产研究中心, 自如研究院, 新华网文化产业研究院. 2025中国城市长租市场发展蓝皮书 [R]. 北京, 2025.
-zillow估价 [10]白林,李涛.从Zillow看美国互联网房地产信息服务[J].金融博览, 2014(17):2.DOI:CNKI:SUN:XXJR.0.2014-09-034.
-二房东乱象 [11]金黎钢,叶俊."二房东"群租经营现象依法治理研究[J].[2026-02-17].
-大学生在线租房实现 [12]裴春杰.大学生在线租房系统的设计与实现[D].北京交通大学[2026-02-17].
-lbs [13]李昭,陈浩,高靖,等.基于LBS租房场景构建推荐引擎的方法:CN201911412207.9[P].CN111161034A[2026-02-17].
-前后端分离 [14]孙娉娉,李新,史广军.基于前后端分离的内容管理系统[J].科研信息化技术与应用, 2016, 7(4):6.DOI:10.11871/j.issn.1674-9480.2016.04.009.
-express [15]王伶俐,张传国.基于NodeJS+Express框架的轻应用定制平台的设计与实现[J].计算机科学, 2017, 44(B11):4.DOI:CNKI:SUN:JSJA.0.2017-S2-129.
-[16]程彬,段浩宇,董炜华.基于百度地图API的购房平台系统开发[J].长春师范大学学报, 2014.DOI:CNKI:SUN:CCSS.0.2014-08-023.
+### 上下文工程的技术
 
+1. 保存context：将关键信息保存在内存或硬盘中形成记忆
+2. 选择context：主要有两种，静态选择：将永远重要必须要遵守的信息每一次请求时都要放在上下文中。动态选择：选择与用户问题最相关的记忆放在上下文中，rag和skills就是动态选择
+3. 压缩context：大模型输出的文本和工具的执行结果会产生大量数据，因此需要压缩，可以在AGENT.md文件中指定压缩策略。另外压缩也是调用大模型来压缩，所以需要设定一个阈值达到这个阈值后压缩上下文，空余出来的上下文用于让大模型压缩上下文，claude设置的时95%
+4. 隔离context：不同模块之间的上下文是隔离的互不干扰，通常发生在multi-agent系统里面，在这个架构中lead-agent主要负责任务分发和归纳总结，sub-agent用于执行分到的任务，不同的sub-agent上下文是隔离的
+![](attachments/Pasted%20image%2020260222203926.png)
 
+# Temperature和Top-p
+两个参数都是越高模型的回答更随机更有创造力，越低模型的回答会越确定更保守
 
+Temperature温度，温度越低分子越不活跃，温度越高分子越活跃
+大模型会结合token和用户的输入打分，分数越高的token越排的前面，这样ai就会按照分数选择token，接着将上一个选择的token再次和其他token结合打分，继续选择分数最高的token直到最后分数最高的是结束符就结束输出，如果不改变temperatue就会导致模型的回答永远是分数最高的一组token，每次的回答都是一样的，所以引入了temperature作为转换概率的入参，temperature越大越会拉低高分和拉高低分，这样就会将原本低分的token分数更高，原本高分的token分数更低。
+此外在选择token时还会按照坐标轴将token的概率放在坐标轴上，生成随机数选择随机数落在的token概率所包含的范围上，这样来增强结果的随机性，而token的相似度往往是前几个高相似度的token带着后面大量低相似度的token，top-p的作用设置一个阈值就是截去后面低相似度的token，再将剩余高相似度的token重新计算让它们的范围之和等于100%，再生成随机数来选择
+![](attachments/Pasted%20image%2020260222200949.png)
