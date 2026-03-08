@@ -4,4 +4,5 @@ node_modules
 */.vuepress/dist
 .vercel
 .env
-.obsidian
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
