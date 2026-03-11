@@ -1,4 +1,5 @@
 {
   "showLineNumber": true,
-  "useMarkdownLinks": true
+  "useMarkdownLinks": true,
+  "promptDelete": false
 }
