@@ -1,5 +1,6 @@
 {
   "showLineNumber": true,
   "useMarkdownLinks": true,
-  "promptDelete": false
+  "promptDelete": false,
+  "attachmentFolderPath": "./attachments"
 }

@@ -1,4 +1,5 @@
 {
   "accentColor": "#04b84c",
-  "cssTheme": "Cupertino"
+  "cssTheme": "Cupertino",
+  "monospaceFontFamily": "Consolas"
 }
