@@ -296,6 +296,18 @@ git submodule update --remote <path>
 git submodule foreach git pull
 ```
 
+# subtree
+submodule 对于父仓库来说是只读的，要修改只能在 submodule 仓库中修改提交后，父仓库再拉取最新的 submodule 的提交，且 submodule 只能拉取最新的提交，不能指定分支等。
+相比与 submodule 来说 subtree 更加强大，git 官方也推荐使用 subtree 代替 submodule
+
+1. 添加 subtree
+path：subtree存储的路径
+url：subtree仓库链接
+branch：分支名
+squash 参数：可选，压缩提交。如果不使用该参数拉取到的 subtree 仓库将包含完整的提交记录，如果使用该参数，拉取到的 subtree 仓库会将之前的所有提交压缩成一个提交
+```bash
+git subtree add --prefix=<path> <url> <branch> --squash
+```
 
 
 
