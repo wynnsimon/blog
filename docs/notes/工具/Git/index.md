@@ -270,3 +270,34 @@ git rebase "分支名"
 在git中每个分支都有一个HEAD指针指向当前分支的最新提交记录
 而在执行rebase操作之后git会先找到当前分支和目标分支的共同祖先（也就是分歧点）
 再把当前分支上共同祖先到最新提交记录的所有提交都移动到目标分支的最新提交后面
+
+# submodule
+在一个 git 仓库中可以配置子仓库，子仓库可以单独管理，记录的子仓库只是添加时最新的提交，并不会自动跟随分支更新，子仓库更新时需要手动拉取子仓库
+
+对于使用了 submodule 的仓库来说，使用 clone 命令并不会克隆其中的 submoudle 仓库，其中的 submodule 都是空文件夹，需要添加 `--recursive` 参数，如果不适用这个参数 需要手动执行 `git submodule init`
+
+1. 配置 submodule
+url：仓库的链接
+path：存放的文件夹（相对于父仓库的根目录）
+```bash
+git submodule add <url> <path>
+```
+2. 拉取最新的子仓库
+需要手动进入子仓库的目录中执行 `git pull` 命令
+
+也可以在根目录中执行一下命令拉取对应子仓库的最新提交
+path：要更新的子模块所在目录
+```bash
+git submodule update --remote <path>
+```
+
+如果项目中有多个子仓库可以使用以下命令批量拉取
+```bash
+git submodule foreach git pull
+```
+
+
+
+
+
+
