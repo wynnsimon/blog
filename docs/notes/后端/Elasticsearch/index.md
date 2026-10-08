@@ -37,17 +37,50 @@ Lucene 是一个 Java 语言的搜索引擎类库（jar 包），是 Apache 公�
 | Schema   | Mapping       | Mapping(映射）是索引中文档的约束，例如字段类型约束。类似数据库的表结构(Schema)                 |
 | SQL      | DSL           | DSL 是 elasticsearch 提供的 JSON 风格的请求语句，用来操作 elasticsearch,实现 CRUD |
 
+## 分词器
 
+es 自带的分词器只支持英文，如果是中文内容需要使用社区中的其他分词器，最常用的是 ik 分词器
 
+分词器默认只提供通用的字典来进行分词，如果是新兴的词语，比如新的网络用语等就无法正确分词，要让分词器可以正常分割新兴词语需要扩展词库。
+分词器在分词时还会产生不必要的词比如 的、了等语气词，联结词等就没必要使用这些词去查询，以及一些敏感词等都需要屏蔽，就需要停用词库
+- 扩展词库：ik分词器修改目录中的config目录中的ikAnalyzer.cfg.xml文件的 key 为 ext_dict 的 entry 标签值为扩展词库的与当前文件的相对路径
+- 停用词库：ik分词器修改目录中的config目录中的ikAnalyzer.cfg.xml文件的 key 为 stopword_dict 的 entry 标签，值为停用词库的与当前配置文件的相对路径
 
+## mapping 属性
+mapping 是对索引库中文档的约束，常见的 mapping 属性包括：
+- type：字段的数据类型。字符串：text（可分词的文本）、keyword（精确值，不可分词的文本）、数值：long、integer、short、byte、double、float、布尔：boolean、日期：date、对象：object
+- index：是否创建索引，默认为 true。创建索引的字段会参与搜索
+- analyzer：使用哪种分词器
+- properties：该字段的子字段
 
+# 操作
+ES 中通过 Restful 请求操作索引库、文档。请求内容用 DSL 语句来表示。
 
-
-
-
-
-
-
+创建索引库和 mapping 的 DSL 语法：
+```
+PUT /索引库名称
+{
+	"mappings": {
+		"properties": {
+			"字段名"：{
+				"type": "text",
+				"analyzer":"ik_smart"
+			},
+			"字段名2"：{
+				"type": "keyword",
+				"index": "false"
+			},
+			"字段名3"：{
+				"properties": {
+					"子字段"：{
+						"type": "keyword"
+					}
+				}
+			},
+		}
+	}
+}
+```
 
 
 
