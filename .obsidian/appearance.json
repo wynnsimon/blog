@@ -1,5 +1,6 @@
 {
   "accentColor": "#04b84c",
   "cssTheme": "",
-  "monospaceFontFamily": "Consolas"
+  "monospaceFontFamily": "Consolas",
+  "nativeMenus": false
 }
